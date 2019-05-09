@@ -11,6 +11,12 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
+    
+    require( 'datatables.net-bs4' )(window, $);
+    require( 'datatables.net-autofill-bs4' )(window, $);
+    require( 'datatables.net-responsive-bs4' )(window, $);
+    require( 'datatables.net-scroller-bs4' )(window, $);
+    require( 'datatables.net-select-bs4' )(window, $);
 } catch (e) {}
 
 /**
