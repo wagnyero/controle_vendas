@@ -15,7 +15,7 @@ class CreateVendedorsTable extends Migration
     {
         Schema::create('vendedores', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger("cpf");
+            $table->bigInteger("cpf")->unique();
             $table->string("nome", 120);
             $table->timestamps();
         });

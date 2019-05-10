@@ -14,3 +14,13 @@
 Route::get('/', function () {
     return view('index');
 });
+
+Route::get('/vendedor', function () {
+    return view('vendedor');
+});
+
+Route::post("/vendedor/salvarvendedor", "VendedorController@salvarVendedor");
+Route::post("/vendedor/getinformacoesvendedor/{idVendedor}", "VendedorController@getInformacoesVendedor");
+Route::post("/vendedor/excluirvendedor/{idVendedor}", "VendedorController@excluirVendedor");
+Route::post("/vendedor/atualizarvendedor", "VendedorController@atualizarVendedor");
+
