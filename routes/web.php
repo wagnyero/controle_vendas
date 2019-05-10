@@ -23,13 +23,20 @@ Route::get('/produtos', function () {
     return view('produtos');
 });
 
+Route::get('/vendas', function () {
+    return view('vendas');
+});
+
 Route::post("/vendedor/salvarvendedor", "VendedorController@salvarVendedor");
 Route::post("/vendedor/getinformacoesvendedor/{idVendedor}", "VendedorController@getInformacoesVendedor");
 Route::post("/vendedor/excluirvendedor/{idVendedor}", "VendedorController@excluirVendedor");
 Route::post("/vendedor/atualizarvendedor", "VendedorController@atualizarVendedor");
+Route::get("/vendedor/listagemvendedores", "VendedorController@listagemVendedores");
 
 
 Route::post("/produtos/salvarproduto", "ProdutosController@salvarProduto");
 Route::post("/produtos/getinformacoesproduto/{id}", "ProdutosController@getInformacoesProduto");
 Route::post("/produtos/atualizarproduto", "ProdutosController@atualizarProduto");
 Route::post("/produtos/excluirProduto/{id}", "ProdutosController@excluirProduto");
+
+Route::post("/vendas/salvarvenda", "VendasController@salvarVenda");

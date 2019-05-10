@@ -112,4 +112,9 @@ class VendedorController extends Controller {
         
         return json_encode($msgControleProcessamento, JSON_UNESCAPED_UNICODE);
     }
+    
+    public function listagemVendedores() {
+        return Vendedor::all()
+                ->toJson();
+    }
 }

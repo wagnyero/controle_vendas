@@ -113,4 +113,13 @@ class ProdutosController extends Controller {
         
         return json_encode($msgControleProcessamento, JSON_UNESCAPED_UNICODE);
     }
+    
+    public function autoloadingProduto(Request $request) {
+        $nomeDisciplina = $request->input("term");
+
+        $bd = new Produtos();
+        $jsonRetorno = $bd->autoloadingProduto($nomeDisciplina);
+        
+        return $jsonRetorno->toJson(JSON_UNESCAPED_UNICODE);
+    }
 }

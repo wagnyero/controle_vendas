@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class Produtos extends Model {
     
+    function vendas() {
+        return $this->belongsToMany("App\Vendas", "venda_produtos", "produtos_id", "vendas_id");
+    }
+    
     public function getListaProdutos($request){
         DB::statement(DB::raw('set @linha = 0'));
         $lista = DB::table("produtos")
@@ -22,5 +26,17 @@ class Produtos extends Model {
                                 ->get();
         
         return $lista;
+    }
+    
+    public function autoloadingProduto($nome) {
+        $jsonRetorno = DB::table("produtos")
+                            ->select("id", 
+                                     "nome AS label",
+                                     "nome AS value")
+                
+                            ->where("nome", "like", "%$nome%")
+                            ->get();
+        
+        return $jsonRetorno;
     }
 }

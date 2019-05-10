@@ -9,13 +9,17 @@ class Vendedor extends Model {
     
     protected $table = "vendedores";
     
+    function vendas() {
+        return $this->hasOne("App\Vendas", "vendedor_id", "id");
+    }
+    
     public function getListaVendedores($request){
         DB::statement(DB::raw('set @linha = 0'));
         $lista = DB::table("vendedores")
                                 ->select(   "id",
                                             "nome", 
                                             "cpf", 
-                                            DB::raw('@linha := @linha  + 1 AS rnum') )
+                                            DB::raw('@linha := @linha + 1 AS rnum') )
                 
                                 ->orderBy("nome", "asc")
                                 ->offset($request->input("start"))

@@ -11,6 +11,7 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
+    require( 'jquery-ui/ui/widgets/autocomplete.js');
     
     require( 'datatables.net-bs4' )(window, $);
     require( 'datatables.net-autofill-bs4' )(window, $);

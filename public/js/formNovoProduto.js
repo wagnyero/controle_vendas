@@ -106,7 +106,7 @@ var FormNovoProduto = (function(){
                     return false;
                 }
                 
-                if( confirm("Deseja realmente inserir um novo Vendedor?") ) {
+                if( confirm("Deseja realmente inserir um novo Produto?") ) {
                     showLoading();
                     json = _configuracoesGerais.efetuarPost("/produtos/salvarproduto", $("#frmNovo").serialize() );
                     json = $.parseJSON(json);

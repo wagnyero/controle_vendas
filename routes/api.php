@@ -20,3 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post("/vendedor/getlistavendedores", "VendedorController@getListaVendedores");
 
 Route::post("/produtos/getlistaprodutos", "ProdutosController@getListaProdutos");
+Route::get("/produtos/autoloadingproduto", "ProdutosController@autoloadingProduto");
+
+Route::post("/vendas/getlistagemvendas", "VendasController@getListagemVendas");
+Route::post("/vendas/getlistaprodutosvendas", "VendasController@getListaProdutosVendas");

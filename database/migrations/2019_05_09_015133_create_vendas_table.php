@@ -15,11 +15,8 @@ class CreateVendasTable extends Migration
     {
         Schema::create('vendas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->float("total");
             $table->bigInteger("vendedor_id")->unsigned();
-            $table->bigInteger("produtos_id")->unsigned();
             $table->foreign("vendedor_id")->references("id")->on("vendedores");
-            $table->foreign("produtos_id")->references("id")->on("produtos");
             $table->timestamps();
         });
     }
