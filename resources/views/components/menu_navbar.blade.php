@@ -13,7 +13,7 @@
         <a class="nav-link text-white" href="/vendedor">Vendedores</a>
       </li>
       <li>
-        <a class="nav-link text-white" href="/produto">Produtos</a>
+        <a class="nav-link text-white" href="/produtos">Produtos</a>
       </li>
       <li>
         <a class="nav-link text-white" href="/vendas">Vendas</a>

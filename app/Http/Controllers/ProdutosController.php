@@ -3,24 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Vendedor;
-use Illuminate\Database\QueryException;
+use App\Produtos;
 
-class VendedorController extends Controller {
+class ProdutosController extends Controller {
     
-    public function getListaVendedores(Request $request) {
-        $dbDisciplina = new Vendedor();
+    public function getListaProdutos(Request $request) {
+        $dbDisciplina = new Produtos();
         
-        $dados = $dbDisciplina->getListaVendedores($request);
+        $dados = $dbDisciplina->getListaProdutos($request);
         
         $total = $dbDisciplina->count();
         
         $listaFormatada = null;
         if(count($dados) > 0) {
-            $html = "<button type='button' class='btn btn-xs btn-outline-success btnEditarVendedor'>
+            $html = "<button type='button' class='btn btn-xs btn-outline-success btnEditar'>
                         <i class='material-icons vertical-align-sub md-17'>edit</i> 
                     </button>
-                    <button type='button' class='btn btn-xs btn-outline-danger btnExcluirVendedor'>
+                    <button type='button' class='btn btn-xs btn-outline-danger btnExcluir'>
                         <i class='material-icons vertical-align-sub md-17'>not_interested</i> 
                     </button>";
             
@@ -40,39 +39,40 @@ class VendedorController extends Controller {
         return json_encode($listaSolicitacoes, JSON_UNESCAPED_UNICODE);
     }
     
-    public function salvarVendedor(Request $request) {
+    public function salvarProduto(Request $request) {
         try {
             
-            $bdVendedor = new Vendedor();
-            $bdVendedor->nome = $request->input("txtNome");
-            $bdVendedor->cpf = $request->input("txtCpf");
+            $bd = new Produtos();
+            $bd->nome = $request->input("txtNome");
+            $bd->departamento = $request->input("txtDepartamento");
+            $bd->valor = $request->input("txtValor");
 
-            $bdVendedor->save();
+            $bd->save();
             
-                $msgControleProcessamento["CONTROLE"] = "SUCESSO";
-                $msgControleProcessamento["MENSAGEM"] = "Vendedor Cadastrado com sucesso";
-                $msgControleProcessamento["ID"] = $bdVendedor->id;  
+            $msgControleProcessamento["CONTROLE"] = "SUCESSO";
+            $msgControleProcessamento["MENSAGEM"] = "Produto Cadastrado com sucesso";
+            $msgControleProcessamento["ID"] = $bd->id;  
             
         } catch (QueryException $e) {
             $msgControleProcessamento["CONTROLE"] = "ERRO";
-            $msgControleProcessamento["MENSAGEM"] = "ERRO: CPF já está sendo utilizado em outro cadastro.";
+            $msgControleProcessamento["MENSAGEM"] = "ERRO: Não foi possível inserir um novo produto.";
             $msgControleProcessamento["ID"] = "";
         }
 
         return json_encode($msgControleProcessamento, JSON_UNESCAPED_UNICODE);
     }
     
-    public function getInformacoesVendedor($idVendedor) {
-        return Vendedor::where("id" ,$idVendedor)
+    public function getInformacoesProduto($id) {
+        return Produtos::where("id", $id)
                 ->first()
                 ->toJson(JSON_UNESCAPED_UNICODE);
     }
     
-    public function excluirVendedor($idVendedor) {
-        $bdVendedor = Vendedor::find($idVendedor);
+    public function excluirProduto($id) {
+        $bd = Produtos::find($id);
         
-        if(isset($bdVendedor)){
-            $bdVendedor->delete();
+        if(isset($bd)){
+            $bd->delete();
             
             $msgControleProcessamento["CONTROLE"] = "SUCESSO";
             $msgControleProcessamento["MENSAGEM"] = "Vendedor Excluído com sucesso";
@@ -86,17 +86,18 @@ class VendedorController extends Controller {
         return json_encode($msgControleProcessamento, JSON_UNESCAPED_UNICODE);
     }
     
-    public function atualizarVendedor(Request $request) {
-        $bdVendedor = Vendedor::find($request->input("hdnIdVendedor"));
+    public function atualizarProduto(Request $request) {
+        $bd = Produtos::find($request->input("hdnIdProduto"));
         
-        if(isset($bdVendedor)){
+        if(isset($bd)){
             try {
-                $bdVendedor->nome = $request->input("txtNomeEdicao");
-                $bdVendedor->cpf = $request->input("txtCpfEdicao");
-                $bdVendedor->save();
+                $bd->nome = $request->input("txtNomeEditar");
+                $bd->departamento = $request->input("txtDepartamentoEditar");
+                $bd->valor = $request->input("txtValorEditar");
+                $bd->save();
                 
                 $msgControleProcessamento["CONTROLE"] = "SUCESSO";
-                $msgControleProcessamento["MENSAGEM"] = "Vendedor Atualizado com sucesso";
+                $msgControleProcessamento["MENSAGEM"] = "Produto atualizado com sucesso";
                 $msgControleProcessamento["ID"] = "";
                 
             } catch (QueryException $exc) {
