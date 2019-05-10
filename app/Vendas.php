@@ -54,4 +54,25 @@ class Vendas extends Model {
         
         return $lista;
     }
+    
+    public function relatorioTopVendas($request){
+        DB::statement(DB::raw('set @linha = 0'));
+        $lista = DB::table("vendas")
+                    ->join("vendedores", "vendedores.id", "=", "vendas.vendedor_id")
+                    ->join("venda_produtos", "venda_produtos.vendas_id", "=", "vendas.id")
+                    ->join("produtos", "venda_produtos.produtos_id", "=", "produtos.id")
+                
+                    ->select(   "vendas.id",
+                                "vendedores.nome", 
+                                DB::raw("SUM(produtos.valor) AS TOTAL"), 
+                                DB::raw('@linha := @linha  + 1 AS rnum') )
+                
+                    ->groupBy("vendas.id", "vendedores.nome")
+                    ->orderBy("total", "desc")
+                    ->offset($request->input("start"))
+                    ->limit($request->input("length"))
+                    ->get();
+        
+        return $lista;
+    }
 }

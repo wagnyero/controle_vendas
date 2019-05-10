@@ -62,20 +62,22 @@ var FormNovoVendedor = (function(){
                 return false;
             });
         },
-        excluirDisciplina: function(){
+        excluirVendedor: function(){
             $("#tabelaVendedores").on("click", ".btnExcluirVendedor", function(e){
                 var idVendedor = $(this).parent().parent().find("td:nth-child(2)").text(),
                     json = "";
                 
-                json = _configuracoesGerais.efetuarPost( "/vendedor/excluirvendedor/" + idVendedor, $("#frmNovoVendedor").serialize() );
-                json = $.parseJSON(json);
-                
-                if(json.CONTROLE == "SUCESSO") {
-                    $("#tabelaVendedores").DataTable().ajax.reload();
+                if(confirm("ATENÇÃO: Esse produto também será removido de todas as Vendas")) {
+                    json = _configuracoesGerais.efetuarPost( "/vendedor/excluirvendedor/" + idVendedor, $("#frmNovoVendedor").serialize() );
+                    json = $.parseJSON(json);
 
-                    alert(json.MENSAGEM);
-                } else {
-                    alert(json.MENSAGEM);
+                    if(json.CONTROLE == "SUCESSO") {
+                        $("#tabelaVendedores").DataTable().ajax.reload();
+
+                        alert(json.MENSAGEM);
+                    } else {
+                        alert(json.MENSAGEM);
+                    }
                 }
                 
                 e.stopPropagation();
@@ -195,7 +197,7 @@ var FormNovoVendedor = (function(){
         geral: function(){
             _clickButton.atualizar();
             _clickButton.editarVendedor();
-            _clickButton.excluirDisciplina();
+            _clickButton.excluirVendedor();
             _clickButton.salvar();
             _configuracoesGerais.somenteNumeros();
             _configuracoesGerais.showDataTables();

@@ -68,15 +68,17 @@ var FormNovoProduto = (function(){
                 var id = $(this).parent().parent().find("td:nth-child(2)").text(),
                     json = "";
                 
-                json = _configuracoesGerais.efetuarPost( "/produtos/excluirProduto/" + id, $("#frmNovo").serialize() );
-                json = $.parseJSON(json);
-                
-                if(json.CONTROLE == "SUCESSO") {
-                    $("#tabelaProdutos").DataTable().ajax.reload();
+                if(confirm("ATENÇÃO: Esse produto também será removido de todas as Vendas")) {
+                    json = _configuracoesGerais.efetuarPost( "/produtos/excluirProduto/" + id, $("#frmNovo").serialize() );
+                    json = $.parseJSON(json);
 
-                    alert(json.MENSAGEM);
-                } else {
-                    alert(json.MENSAGEM);
+                    if(json.CONTROLE == "SUCESSO") {
+                        $("#tabelaProdutos").DataTable().ajax.reload();
+
+                        alert(json.MENSAGEM);
+                    } else {
+                        alert(json.MENSAGEM);
+                    }
                 }
                 
                 e.stopPropagation();

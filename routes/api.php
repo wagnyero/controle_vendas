@@ -24,3 +24,4 @@ Route::get("/produtos/autoloadingproduto", "ProdutosController@autoloadingProdut
 
 Route::post("/vendas/getlistagemvendas", "VendasController@getListagemVendas");
 Route::post("/vendas/getlistaprodutosvendas", "VendasController@getListaProdutosVendas");
+Route::post("/vendas/relatoriotopvendas", "VendasController@relatorioTopVendas");

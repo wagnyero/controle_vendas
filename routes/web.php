@@ -27,6 +27,10 @@ Route::get('/vendas', function () {
     return view('vendas');
 });
 
+Route::get('/relatorios', function () {
+    return view('relatorios');
+});
+
 Route::post("/vendedor/salvarvendedor", "VendedorController@salvarVendedor");
 Route::post("/vendedor/getinformacoesvendedor/{idVendedor}", "VendedorController@getInformacoesVendedor");
 Route::post("/vendedor/excluirvendedor/{idVendedor}", "VendedorController@excluirVendedor");

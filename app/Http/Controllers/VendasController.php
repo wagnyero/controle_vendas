@@ -130,4 +130,27 @@ class VendasController extends Controller {
         
         return json_encode($listaSolicitacoes, JSON_UNESCAPED_UNICODE);
     }
+    
+    public function relatorioTopVendas(Request $request){
+        $db = new Vendas();
+        
+        $dados = $db->relatorioTopVendas($request);
+        $total = $db->count();
+        
+        $listaFormatada = null;
+        if(count($dados) > 0) {
+            foreach ($dados as $key => $value) {
+                $listaFormatada[$key] = array_values(get_object_vars($dados[$key]));
+            } 
+        } else {
+            $listaFormatada = "";
+        }
+        
+        $listagem = array("draw"               => $request->input("draw"),
+                                   "recordsTotal"       => $total,
+                                   "recordsFiltered"    => $total,
+                                   "data"               => $listaFormatada);
+        
+        return json_encode($listagem, JSON_UNESCAPED_UNICODE);
+    }
 }

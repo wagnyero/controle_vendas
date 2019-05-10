@@ -18,6 +18,9 @@
       <li>
         <a class="nav-link text-white" href="/vendas">Vendas</a>
       </li>
+      <li>
+        <a class="nav-link text-white" href="/relatorios">Relatórios</a>
+      </li>
     </ul>
   </div>
 </nav>

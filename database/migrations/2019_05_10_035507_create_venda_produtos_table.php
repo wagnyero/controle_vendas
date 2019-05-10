@@ -15,9 +15,9 @@ class CreateVendaProdutosTable extends Migration
     {
         Schema::create('venda_produtos', function (Blueprint $table) {
             $table->bigInteger("produtos_id")->unsigned();
-            $table->foreign("produtos_id")->references("id")->on("produtos");
+            $table->foreign("produtos_id")->references("id")->on("produtos")->onDelete("cascade");
             $table->bigInteger("vendas_id")->unsigned();
-            $table->foreign("vendas_id")->references("id")->on("vendas");
+            $table->foreign("vendas_id")->references("id")->on("vendas")->onDelete("cascade");
             $table->primary(["vendas_id", "produtos_id"]);
         });
     }
