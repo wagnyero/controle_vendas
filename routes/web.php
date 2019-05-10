@@ -40,3 +40,5 @@ Route::post("/produtos/atualizarproduto", "ProdutosController@atualizarProduto")
 Route::post("/produtos/excluirProduto/{id}", "ProdutosController@excluirProduto");
 
 Route::post("/vendas/salvarvenda", "VendasController@salvarVenda");
+Route::get("/vendas/excluirprodutovenda", "VendasController@excluirProdutoVenda");
+Route::get("/vendas/adicionarprodutovenda", "VendasController@adicionarProdutoVenda");

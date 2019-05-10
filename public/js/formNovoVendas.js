@@ -6,7 +6,7 @@ var FormNovoVenda = (function(){
     },
     _autoLoading = {
         autoLoadingProduto: function() {
-            $("#txtNomeProduto").keypress(function(){
+            $("#txtNomeProduto, #txtNomeProdutoEditar").keypress(function(){
                 var cache = {};
                 
                 $(this).autocomplete({
@@ -70,69 +70,30 @@ var FormNovoVenda = (function(){
                 $("#txtNomeProduto").val("").focus();
             });
         },
-        atualizar: function(){
-            $("#btnAtualizarVendedor").click(function() {
-                var json = null,
-                    controlePreenchimento = "ok";
+        addProdutoEdicao: function(){
+            $("#btnAdicionarProdutoEditar").click(function(){
+                var parametros = {txtNomeProdutoEditar: $("#txtNomeProdutoEditar").val(),
+                                  txtIdVenda: $("#hdnIdVenda").val()};
                 
-                //VERIFICANDO SE OS INPUTS E SELECTS ESTÃO PREENCHIDOS
-                $("#frmEditarVendedor .campoObrigatorio").each(function(){
-                    
-                    if($(this).val() == "") {
-                        $(this).addClass("border border-danger");
-                        controlePreenchimento = "nok";
+                $.getJSON( "/vendas/adicionarprodutovenda", parametros, function( data, status, xhr ) {
+                    if(data.CONTROLE == "SUCESSO") {
+                        $("#tabelaEditarItensVenda").DataTable().ajax.reload();
+
+                        alert(data.MENSAGEM);
                     } else {
-                        $(this).removeClass("border border-danger");
+                        alert(data.MENSAGEM);
                     }
                 });
-
-                if(controlePreenchimento === "nok") {
-                    alert("Preencha os campos obrigatórios");
-                    
-                    return false;
-                }
-                
-                if( confirm("Deseja realmente atualizar?") ) {
-                    showLoading();
-                    json = _configuracoesGerais.efetuarPost( "/vendedor/atualizarvendedor", $("#frmEditarVendedor").serialize() );
-                    json = $.parseJSON(json);
-
-                    if(json.CONTROLE == "SUCESSO"){
-                        $("#tabelaVendedores").DataTable().ajax.reload();
-                        alert(json.MENSAGEM);
-                        $("#modalEditarVendedor").modal("hide");
-                    } else {
-                        alert(json.MENSAGEM);
-                    }
-                }
             });
         },
-        editarVendedor: function(){
-            $("#tabelaVendedores").on("click", ".btnEditarVendedor", function(e){
-                var idVendedor = $(this).parent().parent().find("td:nth-child(2)").text(),
-                    json = "";
-                
-                showLoading();
-                json = _configuracoesGerais.efetuarPost( "/vendedor/getinformacoesvendedor/" + idVendedor, $("#frmNovoVendedor").serialize() );
-                json = $.parseJSON(json);
-                
-                $("#txtNomeEdicao").val(json.nome);
-                $("#txtCpfEdicao").val(json.cpf);
-                $("#hdnIdVendedor").val(json.id);
-
-                $("#modalEditarVendedor").modal("show");
-                
-                e.stopPropagation();
-                e.stopImmediatePropagation();
-                return false;
-            });
-        },
-        visualizarProdutosVenda: function(){
-            $("#tabelaVendas").on("click", ".btnVisualizar", function(e){
+        editar: function(){
+            $("#tabelaVendas").on("click", ".btnEditar", function(e){
                 var idVenda = $(this).parent().parent().find("td:nth-child(2)").text();
                 
+                $("#hdnIdVenda").val(idVenda);
+
                 showLoading();
-                $("#tabelaItens").DataTable({
+                $("#tabelaEditarItensVenda").DataTable({
                     scrollX: true,
                     scrollY: "30vh",
                     pageLength: 100,
@@ -143,8 +104,7 @@ var FormNovoVenda = (function(){
                     order: false,
                     dom: 'Bfrtip',
                     columnDefs: [
-                            { "width": "10%", "targets": 0 },
-                            { "width": "5%", "targets": 1 }
+                            { "width": "5%", "targets": 0 }
                     ],
                     ajax: {
                         url: "/api/vendas/getlistaprodutosvendas",
@@ -153,7 +113,8 @@ var FormNovoVenda = (function(){
                             showLoading();
                         },
                         data: function(e){
-                            e.txtIdVenda = idVenda
+                            e.txtIdVenda = idVenda;
+                            e.acao = "edicao";
                         },
                         complete: function(){
                             hideLoading();
@@ -179,30 +140,30 @@ var FormNovoVenda = (function(){
                         }
                     }
                 });
-                
-                $("#modalVisualizarItens").modal("show");
+
+                $("#modalEditarItens").modal("show");
                 
                 e.stopPropagation();
                 e.stopImmediatePropagation();
                 return false;
             });
         },
-        excluirDisciplina: function(){
-            $("#tabelaVendedores").on("click", ".btnExcluirVendedor", function(e){
-                var idVendedor = $(this).parent().parent().find("td:nth-child(2)").text(),
-                    json = "";
+        excluirProduto: function(){
+            $("#tabelaEditarItensVenda").on("click", ".btnExcluirItemVenda", function(e){
+                var idProduto = $(this).parent().parent().find("td:nth-child(2)").text(),
+                    parametros = {txtIdProduto: idProduto,
+                                  txtIdVenda: $("#hdnIdVenda").val()};
                 
-                json = _configuracoesGerais.efetuarPost( "/vendedor/excluirvendedor/" + idVendedor, $("#frmNovoVendedor").serialize() );
-                json = $.parseJSON(json);
-                
-                if(json.CONTROLE == "SUCESSO") {
-                    $("#tabelaVendedores").DataTable().ajax.reload();
+                $.getJSON( "/vendas/excluirprodutovenda", parametros, function( data, status, xhr ) {
+                    if(data.CONTROLE == "SUCESSO") {
+                        $("#tabelaEditarItensVenda").DataTable().ajax.reload();
 
-                    alert(json.MENSAGEM);
-                } else {
-                    alert(json.MENSAGEM);
-                }
-                
+                        alert(data.MENSAGEM);
+                    } else {
+                        alert(data.MENSAGEM);
+                    }
+                });
+
                 e.stopPropagation();
                 e.stopImmediatePropagation();
                 return false;
@@ -252,7 +213,67 @@ var FormNovoVenda = (function(){
                     }
                 }
             });
-        }
+        },
+        visualizarProdutosVenda: function(){
+            $("#tabelaVendas").on("click", ".btnVisualizar", function(e){
+                var idVenda = $(this).parent().parent().find("td:nth-child(2)").text();
+                
+                showLoading();
+                $("#tabelaItens").DataTable({
+                    scrollX: true,
+                    scrollY: "30vh",
+                    pageLength: 100,
+                    destroy: true,
+                    searching: false,
+                    processing: false,
+                    serverSide: true,
+                    order: false,
+                    dom: 'Bfrtip',
+                    columnDefs: [
+                            { "width": "5%", "targets": 0 }
+                    ],
+                    ajax: {
+                        url: "/api/vendas/getlistaprodutosvendas",
+                        type: "POST",
+                        beforeSend: function(){
+                            showLoading();
+                        },
+                        data: function(e){
+                            e.txtIdVenda = idVenda;
+                            e.acao = "visualizar";
+                        },
+                        complete: function(){
+                            hideLoading();
+                        }
+                    },
+                    buttons: [
+                        {
+                            responsive: true,
+                            extend: "excelHtml5",
+                            className: 'btn btn-sm'
+                        }
+                    ],
+                    language: {
+                        "processing": "<img src='" + $("#hdnRootPath").val() + "/images/load_1.gif' align='top' width='48px' height='48px' style='cursor: wait; z-index: 99999999;' />Carregando...",
+                        "info":           "Exibindo _START_ a _END_ de _TOTAL_ registros",
+                        "infoEmpty":      "Exibindo 0 a 0 de 0 registros",
+                        "lengthMenu":     "Exibir _MENU_ registros",
+                        "oPaginate": {
+                            "sNext":        "Próximo",
+                            "sPrevious":    "Anterior",
+                            "sFirst":       "Primeiro",
+                            "sLast":        "Último"
+                        }
+                    }
+                });
+                
+                $("#modalVisualizarItens").modal("show");
+                
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                return false;
+            });
+        },
     },
     _configuracoesGerais = {
         efetuarPost: function(url, parametros){
@@ -329,9 +350,9 @@ var FormNovoVenda = (function(){
             _autoLoading.autoLoadingProduto();
             _autoLoading.listagemVendedores();
             _clickButton.addProduto();
-            _clickButton.atualizar();
-            _clickButton.editarVendedor();
-            _clickButton.excluirDisciplina();
+            _clickButton.addProdutoEdicao();
+            _clickButton.editar();
+            _clickButton.excluirProduto();
             _clickButton.salvar();
             _clickButton.visualizarProdutosVenda();
             _configuracoesGerais.somenteNumeros();

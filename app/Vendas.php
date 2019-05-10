@@ -19,8 +19,6 @@ class Vendas extends Model {
         DB::statement(DB::raw('set @linha = 0'));
         $lista = DB::table("vendas")
                     ->join("vendedores", "vendedores.id", "=", "vendas.vendedor_id")
-                    ->join("venda_produtos", "venda_produtos.vendas_id", "=", "vendas.id")
-                    ->join("produtos", "venda_produtos.produtos_id", "=", "produtos.id")
                 
                     ->select(   "vendas.id",
                                 "vendedores.nome", 

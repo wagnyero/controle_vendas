@@ -21,7 +21,7 @@
                             <div class="form-row">
                                 <div class="form-group col-sm-3">
                                     <label class="font-weight-bold">Produto:</label>
-                                    <input type="text" name="txtNomeProduto" id="txtNomeProduto" class="form-control form-control-sm" maxlength="11" />
+                                    <input type="text" name="txtNomeProduto" id="txtNomeProduto" class="form-control form-control-sm" />
                                 </div>
                                 <div class="form-group col-sm-3 mt-4 pt-2">
                                     <button id="btnAdicionarProduto" type="button" class="btn btn-sm btn-outline-primary">
@@ -45,6 +45,7 @@
                         </div>
                     </div>
                 </div>
+                <input type="hidden" name="hdnIdVenda" id="hdnIdVenda" />
             </form>
 
             <div class="row">
@@ -105,7 +106,59 @@
             </div>
         </div>
     </div>
-    <!-- FIM - Modal Visualizar Itens-->
+<!-- FIM - Modal Visualizar Itens-->
+
+<!-- Modal Editar Itens-->
+    <div class="modal fade" id="modalEditarItens" tabindex="-1" role="dialog" aria-labelledby="modalEditarItensLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Venda</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-sm-3">
+                            <label class="font-weight-bold">Produto:</label>
+                            <input type="text" name="txtNomeProdutoEditar" id="txtNomeProdutoEditar" class="form-control form-control-sm" />
+                        </div>
+                        <div class="form-group col-sm-3 mt-4 pt-2">
+                            <button id="btnAdicionarProdutoEditar" type="button" class="btn btn-sm btn-outline-primary">
+                                <i class="material-icons vertical-align-sub md-17">add</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 table-responsive-sm">
+                            <table id="tabelaEditarItensVenda" class="table table-sm table-striped table-bordered table-hover nowrap w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Opções</th>
+                                        <th>Id</th>
+                                        <th>Produto</th>
+                                        <th>Departamento</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnAtualizarVendedor" type="button" class="btn btn-sm btn-outline-primary">
+                        <i class="material-icons vertical-align-middle md-17">done_all</i> Atualizar  
+                    </button>  
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- FIM - Modal Editar Itens-->
     
 <!-- Modal Editar Vendedor-->
     <div class="modal fade" id="modalEditarVendedor" tabindex="-1" role="dialog" aria-labelledby="modalEditarVendedorLabel" aria-hidden="true">

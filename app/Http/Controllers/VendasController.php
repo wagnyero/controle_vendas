@@ -35,6 +35,36 @@ class VendasController extends Controller {
         return json_encode($msgControleProcessamento, JSON_UNESCAPED_UNICODE);
     }
     
+    public function excluirProdutoVenda(Request $request) {
+        
+        $bdProduto = Produtos::find($request->input("txtIdProduto"));
+        $bdProduto->vendas()->detach($request->input("txtIdVenda"));
+        
+        $msgControleProcessamento["CONTROLE"] = "SUCESSO";
+        $msgControleProcessamento["MENSAGEM"] = "Produto Excluído com sucesso";
+        $msgControleProcessamento["ID"] = "";
+        
+        return json_encode($msgControleProcessamento, JSON_UNESCAPED_UNICODE);
+    }
+    
+    public function adicionarProdutoVenda(Request $request) {
+        try {
+            $bdProduto = Produtos::where("nome", $request->input("txtNomeProdutoEditar"))->first();
+            $bdProduto->vendas()->attach($request->input("txtIdVenda"));
+
+            $msgControleProcessamento["CONTROLE"] = "SUCESSO";
+            $msgControleProcessamento["MENSAGEM"] = "Produto Inserido com sucesso";
+            $msgControleProcessamento["ID"] = "";
+            
+        } catch (QueryException $exc) {
+            $msgControleProcessamento["CONTROLE"] = "ERRO";
+            $msgControleProcessamento["MENSAGEM"] = "ERRO: Problemas ao cadastrar Produto";
+            $msgControleProcessamento["ID"] = "";
+        }
+        
+        return json_encode($msgControleProcessamento, JSON_UNESCAPED_UNICODE);
+    }
+    
     public function getListagemVendas(Request $request) {
         $db = new Vendas();
         
@@ -74,13 +104,20 @@ class VendasController extends Controller {
         $db = new Vendas();
         
         $dados = $db->getListaProdutosVendas($request);
-        
         $total = $db->count();
+        
+        $html = "<button type='button' class='btn btn-xs btn-outline-danger btnExcluirItemVenda'>
+                    <i class='material-icons vertical-align-sub md-17'>not_interested</i> 
+                </button>";
         
         $listaFormatada = null;
         if(count($dados) > 0) {
             foreach ($dados as $key => $value) {
                 $listaFormatada[$key] = array_values(get_object_vars($dados[$key]));
+                
+                if($request->input("acao") == "edicao") {
+                    array_unshift($listaFormatada[$key], $html);
+                }
             } 
         } else {
             $listaFormatada = "";
